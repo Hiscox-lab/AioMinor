@@ -61,65 +61,42 @@ Optional options:
 ```
 
 ## **Examples:**
-**1. ARTIC Nanopore sequencing data**
+**1. ARTIC Illumina sequencing data**
 
-To analyse ARTIC-Nanopore amplicon sequencing data with your chosen primer scheme. Extracts the reads containing the identified leader-TRS junctions in fasta format for pool 1 of amplicon primers (The ARTIC primer_bed can be found in the "primer_bed" folder):
-
-```
-perl LeTRS.pl -t 16 -extractfasta -pool 1 -Rtch cDNA -mode nanopore -fa example.fastq.gz -primer_bed path_to_primer_V3.bed -o LeTRS_output
-```
-
-Optional:
-If "-TRSLindependent" option is added, LeTRS will also identify the TRS Leader independent fusion sites in the reads for pool 1 and pool 2 of amplicon primers (The ARTIC primer_bed can be found in the "primer_bed" folder):
+To analyse ARTIC-Illumina amplicon sequencing data with your chosen primer scheme. (The ARTIC primer bed can be found in the "Primerbeds" folder, and reference genome and coding region of SARS-CoV-2 NC_045512.2 can be found in the "References" folder):
 
 ```
-perl LeTRS.pl -t 16 -pool 0 -Rtch cDNA -mode nanopore -TRSLindependent -fa example.fastq.gz -primer_bed path_to_primer_V3.bed -o LeTRS_output
+perl AioMinor.pl -t 16 -platform illumina -method amplicon -maxins 500 -ref genome.fasta -codingRegion CodingRegion.txt -primerbed nCoV-2019.primer_V3.bed -fq1 example_R1.fastq.gz -fq2 example_R2.fastq.gz -o example_output
 ```
 
-**2. Direct RNA Nanopore sequencing data**
+**2. ARTIC Nanopore sequencing data**
 
-Extracts the reads containing the identified leader-TRS junctions in fasta format:
-
+To analyse ARTIC-Nanopore amplicon sequencing data with your chosen primer scheme. (The ARTIC primer bed can be found in the "Primerbeds" folder, and reference genome and coding region of SARS-CoV-2 NC_045512.2 can be found in the "References" folder):
 ```
-perl LeTRS.pl -t 16 -extractfasta -Rtch RNA -mode nanopore -fq example.fastq.gz -o LeTRS_output
-```
-
-Optional customized leader-TRS junctions analysis:
-Use SARS-CoV-2 or other coronavirus genomes as a reference, and extract the reads containing the identified leader-TRS junctions in fasta format (the instruction of making a reference_folder could be found in "readme.txt" of "making_reference_folder_example" folder):
-
-```
-perl LeTRS.pl -t 16 -extractfasta -Rtch cDNA -mode nanopore -fq example.fastq.gz -primer_bed path_to_custom_primer.bed -o LeTRS_output -ref reference_folder
+perl AioMinor.pl -t 16 -platform nanopore -method amplicon -maxins 1600 -ref genome.fasta -codingRegion CodingRegion.txt -primerbed nCoV-2019.primer_V3.bed -fq example.fastq.gz -o example_output
 ```
 
-**3. Illumina sequencing data**
+**3. Normal Illumina sequencing data**
 
-Extracts the read-pairs containing the identified leader-TRS junctions in fasta format for pool 1 and pool 2 of amplicon primers (the ARTIC primer_bed can be found in the "primer_bed" folder):
-
+To analyse Normal Illumina sequencing data with your chosen primer scheme. (The reference genome and coding region of SARS-CoV-2 NC_045512.2 can be found in the "References" folder):
 ```
-perl LeTRS.pl -t 16 -extractfasta -pool 0 -mode illumina -fq #1.fastq.gz:#2.fastq.gz -primer_bed path_to_primer_V3.bed -o LeTRS_output
-```
-LeTRS also supports single-end Illumina sequencing data:
-
-```
-perl LeTRS.pl -t 16 -extractfasta -pool 0 -mode illumina -fq fastq.gz -primer_bed path_to_primer_V3.bed -o LeTRS_output
-```
-
-Optional: To analyse customized bam file reads derived from any platform aligned by using a splicing mapping method.
-
-```
-perl LeTRS.pl -t 16 -extractfasta -mode illumina -bam example.bam -o LeTRS_output
+perl AioMinor.pl -t 16 -platform nanopore -method amplicon -maxins 1600 -ref genome.fasta -codingRegion CodingRegion.txt -fq1 example_R1.fastq.gz -fq2 example_R2.fastq.gz -o example_output
 ```
 
 ## **Results**
-The results can be found under the "results" folder in output path, with four tables: known_junction.tab, known_junction_details.tab, novel_junction.tab and novel_junction_details.tab.
+The results can be found under the in output path.
 
-### **known_junction.tab**
+### 1_Syn_NonSyn_aa**
 
-The LeTRS output table for known subgenomic mRNA in the sequencing data. "ref_leader_end" and "peak_leader_end" point to the reference position of the end of the leader and the position of the end of the leader identified in the most common reads (peak count) on the reference genome, and "ref_TRS_start" and "peak_TRS_start" refer to the reference position of the start of the TRS and the position of the start of the TRS identified in the most common reads (peak count) on the reference genome.
+*_entropy.txt file in this folder prvides the raw nucletide varation frequency,inlcuding Transitions and transversions. *_AA.txt file in this folder prvides the raw amino acid varation frequency,inlcuding synonymous and non-synonymous substitution. 
 
-### **known_junction_details.tab**
+### 2_Syn_NonSyn_filter**
 
-The LeTRS output table for details of known subgenomic mRNA in the sequencing data. "peak_leader" and "peak_TRS_start" point to the leader-TRS junctions in known_junction.tab, "ACGAAC" indicates if there is an ACGAAC sequence in the "TRS_seq" (TRS sequences), "20_leader_seq" refers to the 20 nucleotides before the end of the leader, and "ATG_postion" and "first_orf_aa" refer to the first AUG position and translated orf of the sgmRNA.
+*_filter.txt file in this folder prvides the filtered nucletide varation frequency,inlcuding Transitions and transversions.
+
+### 3_Syn_NonSyn_filter_aa**
+
+*_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. 
 
 ### **novel_junction.tab**
 
