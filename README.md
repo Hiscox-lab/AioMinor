@@ -88,7 +88,7 @@ The results can be found under the in output path.
 
 ### 1_Syn_NonSyn_aa**
 
-*_entropy.txt file in this folder prvides the raw nucletide varation frequency,inlcuding Transitions and transversions. *_AA.txt file in this folder prvides the raw amino acid varation frequency,inlcuding synonymous and non-synonymous substitution. 
+*_entropy.txt file in this folder prvides the raw nucletide varation frequency compared to the consensus genome,inlcuding Transitions and transversions. *_AA.txt file in this folder prvides the raw amino acid varation frequency compared to the consensus genome,inlcuding synonymous and non-synonymous substitution. 
 
 ### 2_Syn_NonSyn_filter**
 
@@ -96,46 +96,7 @@ The results can be found under the in output path.
 
 ### 3_Syn_NonSyn_filter_aa**
 
-*_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. 
+*_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_minor_change_filtered.txt file in this folder prvides frequency of synonymous and non-synonymous substitution compared to the consensus genome after filtration. 
 
-### **novel_junction.tab**
-
-The LeTRS output table for novel subgenomic mRNA in the sequencing data. "leader_end" and "TRS_start" refer to the position of the end of the leader and the position of the start of the TRS identified in the reads >10.
-
-### **novel_junction_details.tab**
-
-The LeTRS output table for details of novel subgenomic mRNA in the sequencing data. "peak_leader" and "peak_TRS_start" point to the leader-TRS junctions in novel_junction.tab, "ACGAAC" indicates if there is an ACGAAC sequence in the "TRS_seq" (TRS sequences), "20_leader_seq" refers to the 20 nucleotides before the end of the leader, "AUG_postion" and "first_orf_aa" refer to the first AUG position and translated orf of the sgmRNA, and "known_AUG" indicates if the first AUG position is the same as a known sgmRNA.
-
-
-### **TRS_L_independent_junction.tab**
-
-If "-TRSLindependent" option is added, LeTRS will also identify the TRS Leader independent fusion sites in the reads.
-
-### **primer_usages.tab**
-
-If the sequencing data were derived from amplicon method, the primers in the reads used for amplification of subgenomic mRNAs will be stored in this file for the amplicon primer pool selected. e.g. nCoV-2019_9_RIGHT:8 means there are 8 reads/read pairs used the primer of "nCoV-2019_9_RIGHT" (a primer name in the ARTIC primer_bed that can be found in the "primer_bed" folder) to amplify the subgenomic mRNA.
-
-
-## **Plotting**
-There is also a perl script that can plot a diagram for the output of LeTRS.pl.
-
-**Examples:**
-1. Plotting the value in the column of "peak_count" in "known_junction.tab" or "nb_count" in the "novel_junction.tab. "-count 1" indicates the first number of each row in the column and "-count 2" indicates the second number of each row in the column, and so on.
-
-  ```
-  perl LeTRS-plot.pl -count 1 -i known_junction.tab
-  ```
-
-2. Plotting the value in the column of "peak_peak_count_ratio" in "known_junction.tab" or "count_ratio" in the "novel_junction.tab. "-count 1" indicates the first number of each row in the column and "-count 2" indicates the second number of each row in the column, and so on.
-
-  ```
-  perl LeTRS-plot.pl -ratio 1 -i known_junction.tab
-  ```
-
-## Customized leader-TRS junctions and SARS-CoV-2 or other coronavirus genomes as reference sequences.
-Please the see the "readme.txt" file in the "making_reference_folder_example" folder.
-
-## Citation 
-Xiaofeng Dong, Rebekah Penrice-Randal, Hannah Goldswain, Tessa Prince, Nadine Randle, I'ah Donovan-Banfield, Francisco J. Salguero, Julia Tree, Ecaterina Vamos, Charlotte Nelson, Jordan Clark, Yan Ryan, James P. Stewart, Malcolm G. Semple J. Kenneth Baillie, Peter J. M. Openshaw, Lance Turtle, David A. Matthews, Miles W. Carroll, Alistair C. Darby and Julian A. Hiscox. Analysis of SARS-CoV-2 known and novel subgenomic mRNAs in cell culture, animal model, and clinical samples using LeTRS, a bioinformatic tool to identify unique sequence identifiers. GigaScience 2022 DOI: 10.1093/gigascience/giac045
 
 
