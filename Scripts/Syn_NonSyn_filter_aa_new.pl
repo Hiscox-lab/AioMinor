@@ -322,8 +322,6 @@ foreach (@condonalllist) {
         push (@groups, "$condontables[2]");
         push (@groups, "$condontables[3]");
         $hashcondontables{"$condontables[0]\t$condontables[1]\t$condontables[2]\t$condontables[3]\t$condontables[4]\t$condontables[5]\t$condontables[6]\t$condontables[7]\t$condontables[8]\t$condontables[9]"}=[@groups];
-        my @groupelecments=("$condontables[1]","$condontables[2]","$condontables[3]","$condontables[4]","$condontables[5]","$condontables[6]","$condontables[7]","$condontables[8]","$condontables[9]");
-        push (@{$hashelecments{"$condontables[1]\t$condontables[2]\t$condontables[4]\t$condontables[9]"}}, [@groupelecments]);
     }
 }
 
@@ -360,7 +358,7 @@ foreach (@regionlist) {
 
     foreach my $key1 (sort {$hashelecments{$a}[0][1] <=> $hashelecments{$b}[0][1]} keys %hashelecments) {
         if ($key1=~/^$eachcodongregions[0]\t/) {
-            #print "$key1 => ";
+            print "$key1 => ";
             print MINORCHANGE "$key1\t";
             @aaref=split(/\t/, $key1);
             my @codoncollection;
@@ -378,9 +376,9 @@ foreach (@regionlist) {
             my @countN;
             my @stopnum;
             for my $key2 (keys %hashaacount) {
-                #print "$key2->";
+                print "$key2->";
                 my $value_arr = $hashaacount{$key2};
-                #print join(",", @$value_arr), "\ ";
+                print join(",", @$value_arr), "\ ";
                 if ($key2 eq $aaref[2]) {
                     push (@sym, sum(@$value_arr));
                 }

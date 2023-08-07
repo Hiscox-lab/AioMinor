@@ -248,12 +248,12 @@ sub illuminaamplicon {
     }
     
     system ("samtools index $outputpath/alignment/$list\.sorted.bam");
-    unlink ("$outputpath/alignment/$list\.sam");
+    #unlink ("$outputpath/alignment/$list\.sam");
     
     ###bam clipper
-    system ("$selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed.txt -n 196");
+    system ("bash $selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed.txt -n $thread");
     unlink ("$outputpath/alignment/$list\.sorted.bam");
-    unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
+    #unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
     system ("mv ./$list\.sorted.primerclipped.bam* $outputpath/alignment");
     system ("samtools view -h $outputpath/alignment/$list\.sorted.primerclipped.bam > $outputpath/alignment/$list\.sorted.primerclipped.sam");
     open(DATA,"$outputpath/alignment/$list\.sorted.primerclipped.sam");
@@ -273,10 +273,10 @@ sub illuminaamplicon {
     close DATA; close DATAR;
     system ("samtools view -@ $thread -Sb $outputpath/alignment/$list\.sorted.primerclipped.filtered.sam | samtools sort -@ $thread -o $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam");
     system ("samtools index $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam");
-    unlink ("$outputpath/alignment/$list\.sorted.primerclipped.bam");
-    unlink ("$outputpath/alignment/$list\.sorted.primerclipped.bam.bai");
-    unlink ("$outputpath/alignment/$list\.sorted.primerclipped.sam");
-    unlink ("$outputpath/alignment/$list\.sorted.primerclipped.filtered.sam");
+    #unlink ("$outputpath/alignment/$list\.sorted.primerclipped.bam");
+    #unlink ("$outputpath/alignment/$list\.sorted.primerclipped.bam.bai");
+    #unlink ("$outputpath/alignment/$list\.sorted.primerclipped.sam");
+    #unlink ("$outputpath/alignment/$list\.sorted.primerclipped.filtered.sam");
     
     ###running diversiutils, filtration, minor variation
     mkdir "$outputpath/1_Syn_NonSyn_aa";
