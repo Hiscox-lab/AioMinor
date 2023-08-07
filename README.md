@@ -1,12 +1,10 @@
 </p>
-AioMinor was implemented in Perl programming language, including a main script for nucletide and amino acid varation frequency in virus genome.
-```
-It accepts bascalled fastq files derived from Nanopore amplicon sequencing, cleaned/trimmed Illumina amplicon/normal fastq files (single-end or paired-end) with a SARS-CoV-2/other virus genome. By default, AioMinor analyses SARS-CoV-2 based on an NCBI reference genome (NC_045512.2), but the user can also provide customized SARS-CoV-2 or other virus genome as a reference.
+AioMinor was implemented in Perl programming language, including a main script for nucletide and amino acid varation frequency in virus genome. It accepts bascalled fastq files derived from Nanopore amplicon sequencing, cleaned/trimmed Illumina amplicon/normal fastq files (single-end or paired-end) with a SARS-CoV-2/other virus genome. By default, AioMinor analyses SARS-CoV-2 based on an NCBI reference genome (NC_045512.2), but the user can also provide customized SARS-CoV-2 or other virus genome as a reference.
 
 ## Installation:
 **1. Create an environment with one step**
 ```
-git clone https://github.com/xiaofengdong83/LeTRS.git
+git clone https://github.com/Hiscox-lab/AioMinor/AioMinor.git
 cd LeTRS
 conda env create -f my_environment.yml
 source activate LeTRS 
