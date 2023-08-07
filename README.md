@@ -5,31 +5,20 @@ AioMinor was implemented in Perl programming language, including a main script f
 **1. Create an environment with one step**
 ```
 git clone https://github.com/Hiscox-lab/AioMinor/AioMinor.git
-cd LeTRS
+cd AioMinor
 conda env create -f my_environment.yml
-source activate LeTRS 
+source activate AioMinor 
 ```
 **2. Create an environment step by step**
 
 Third party dependencies:
   > samtools(>=1.9)
   > 
-  > hisat2(=2.1.0)
+  > bowtie2(=2.4.1)
   > 
-  > minimap2(=2.17)
-  > 
-  > [portcullis](https://github.com/maplesond/portcullis)(>=1.1.2)
+  > minimap2(=2.24)
 
-
-All these third party tool dependencies should be exported to PATH, so that LeTRS can find them. 
-
-We suggest installing the portcullis with conda as below:
-```
-conda config --add channels defaults
-conda config --add channels bioconda
-conda config --add channels conda-forge
-conda install portcullis=1.2.2
-```
+All these third party tool dependencies should be exported to PATH, so that AioMinor can find them. 
 
 Perl module dependencies:
 ```
