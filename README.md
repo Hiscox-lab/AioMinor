@@ -98,5 +98,18 @@ The results can be found under the in output path.
 
 *_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_minor_change_filtered.txt file in this folder prvides frequency of synonymous and non-synonymous substitution compared to the consensus genome after filtration. 
 
+### alignment/alignment.support_oem**
+consensus.txt file in this folder prvides consensus genome sequences.
+
+
+## **Test data**
+There a test data obtained from ARTIC (V3) Illumina sequencing of a cell culture sample in the Testdata folder. AioMinor can be tested with this data in the AioMinor directory.
+
+```
+perl AioMinor.pl -t 16 -platform illumina -method amplicon -maxins 500 -ref ./References/genome_NC_045512.2.fasta -codingRegion ./References/CodingRegion_NC_045512.2.txt -primerbed ./Primerbeds/nCoV-2019.primer_V3.bed -fq1 ./Testdata/cell_illumina_R1.fastq.gz -fq2 ./Testdata/cell_illumina_R2.fastq.gz -o cell_illumina_output
+```
+
+
+
 
 
