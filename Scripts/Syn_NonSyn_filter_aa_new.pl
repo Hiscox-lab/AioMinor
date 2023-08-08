@@ -73,18 +73,18 @@ foreach (@entropyfilterlist) {
         my @getApostion=split(/\t/);
         foreach my $eachprotein(@{$hashregions{$getApostion[1]}}) {
             if (@$eachprotein[0]<=$getApostion[2] && @$eachprotein[1] >= $getApostion[2]) {
-                print "A\:\t$getApostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getApostion[2]\t";
+                #print "A\:\t$getApostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getApostion[2]\t";
                 my $getAposincondon= ($getApostion[2] - @$eachprotein[0] + 1)/3;
                 if ($getAposincondon =~/\.333/){
                    $getAposincondonvalue=int($getAposincondon)+1;
-                   print $getAposincondonvalue, "\tthis is 1\n";
+                   #print $getAposincondonvalue, "\tthis is 1\n";
                    push (@collectionA,"$getApostion[1]\t@$eachprotein[2]\t$getAposincondonvalue\t0\n");
                 }elsif($getAposincondon =~/\.666/){
                    $getAposincondonvalue=int($getAposincondon)+1;
-                   print int($getAposincondon)+1, "\tthis is 2\n";
+                   #print int($getAposincondon)+1, "\tthis is 2\n";
                    push (@collectionA,"$getApostion[1]\t@$eachprotein[2]\t$getAposincondonvalue\t1\n");
                 }else{
-                   print $getAposincondon, "\tthis is 3\n";
+                   #print $getAposincondon, "\tthis is 3\n";
                    push (@collectionA,"$getApostion[1]\t@$eachprotein[2]\t$getAposincondon\t2\n");
                 }
             } 
@@ -94,18 +94,18 @@ foreach (@entropyfilterlist) {
         my @getCpostion=split(/\t/);
         foreach my $eachprotein(@{$hashregions{$getCpostion[1]}}) {
             if (@$eachprotein[0]<=$getCpostion[2] && @$eachprotein[1] >= $getCpostion[2]) {
-                print "C\:\t$getCpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getCpostion[2]\t";
+                #print "C\:\t$getCpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getCpostion[2]\t";
                 my $getCposincondon= ($getCpostion[2] - @$eachprotein[0] + 1)/3;
                 if ($getCposincondon =~/\.333/){
                    $getCposincondonvalue=int($getCposincondon)+1;
-                   print $getCposincondonvalue, "\tthis is 1\n";
+                   #print $getCposincondonvalue, "\tthis is 1\n";
                    push (@collectionC,"$getCpostion[1]\t@$eachprotein[2]\t$getCposincondonvalue\t0\n");
                 }elsif($getCposincondon =~/\.666/){
                    $getCposincondonvalue=int($getCposincondon)+1;
-                   print int($getCposincondon)+1, "\tthis is 2\n";
+                   #print int($getCposincondon)+1, "\tthis is 2\n";
                    push (@collectionC,"$getCpostion[1]\t@$eachprotein[2]\t$getCposincondonvalue\t1\n");
                 }else{
-                   print $getCposincondon, "\tthis is 3\n";
+                   #print $getCposincondon, "\tthis is 3\n";
                    push (@collectionC,"$getCpostion[1]\t@$eachprotein[2]\t$getCposincondon\t2\n");
                 }
             } 
@@ -115,18 +115,18 @@ foreach (@entropyfilterlist) {
         my @getTpostion=split(/\t/);
         foreach my $eachprotein(@{$hashregions{$getTpostion[1]}}) {
             if (@$eachprotein[0]<=$getTpostion[2] && @$eachprotein[1] >= $getTpostion[2]) {
-                print "T\:\t$getTpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getTpostion[2]\t";
+                #print "T\:\t$getTpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getTpostion[2]\t";
                 my $getTposincondon= ($getTpostion[2] - @$eachprotein[0] + 1)/3;
                 if ($getTposincondon =~/\.333/){
                    $getTposincondonvalue=int($getTposincondon)+1;
-                   print $getTposincondonvalue, "\tthis is 1\n";
+                   #print $getTposincondonvalue, "\tthis is 1\n";
                    push (@collectionT,"$getTpostion[1]\t@$eachprotein[2]\t$getTposincondonvalue\t0\n");
                 }elsif($getTposincondon =~/\.666/){
                    $getTposincondonvalue=int($getTposincondon)+1;
-                   print int($getTposincondon)+1, "\tthis is 2\n";
+                   #print int($getTposincondon)+1, "\tthis is 2\n";
                    push (@collectionT,"$getTpostion[1]\t@$eachprotein[2]\t$getTposincondonvalue\t1\n");
                 }else{
-                   print $getTposincondon, "\tthis is 3\n";
+                   #print $getTposincondon, "\tthis is 3\n";
                    push (@collectionT,"$getTpostion[1]\t@$eachprotein[2]\t$getTposincondon\t2\n");
                 }
             } 
@@ -136,18 +136,18 @@ foreach (@entropyfilterlist) {
         my @getGpostion=split(/\t/);
         foreach my $eachprotein(@{$hashregions{$getGpostion[1]}}) {
             if (@$eachprotein[0]<=$getGpostion[2] && @$eachprotein[1] >= $getGpostion[2]) {
-                print "G\:\t$getGpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getGpostion[2]\t";
+                #print "G\:\t$getGpostion[1]\t@$eachprotein[2]\t@$eachprotein[0]\t@$eachprotein[1]\t$getGpostion[2]\t";
                 my $getGposincondon= ($getGpostion[2] - @$eachprotein[0] + 1)/3;
                 if ($getGposincondon =~/\.333/){
                    $getGposincondonvalue=int($getGposincondon)+1;
-                   print $getGposincondonvalue, "\tthis is 1\n";
+                   #print $getGposincondonvalue, "\tthis is 1\n";
                    push (@collectionG,"$getGpostion[1]\t@$eachprotein[2]\t$getGposincondonvalue\t0\n");
                 }elsif($getGposincondon =~/\.666/){
                    $getGposincondonvalue=int($getGposincondon)+1;
-                   print int($getGposincondon)+1, "\tthis is 2\n";
+                   #print int($getGposincondon)+1, "\tthis is 2\n";
                    push (@collectionG,"$getGpostion[1]\t@$eachprotein[2]\t$getGposincondonvalue\t1\n");
                 }else{
-                   print $getGposincondon, "\tthis is 3\n";
+                   #print $getGposincondon, "\tthis is 3\n";
                    push (@collectionG,"$getGpostion[1]\t@$eachprotein[2]\t$getGposincondon\t2\n");
                 }
             } 
@@ -312,6 +312,7 @@ foreach (@collectionG) {
 
 open(CONDONALLR, ">$outputCONDONALLR");
 open(AMINOACIDALLR, ">$outputAMINOACIDALLR");
+open(MINORCHANGE, ">$outputMINORCHANGE");
 foreach (@condonalllist) {
     chomp;
     if (/^Chr\tProtein/) {
@@ -322,6 +323,10 @@ foreach (@condonalllist) {
         push (@groups, "$condontables[2]");
         push (@groups, "$condontables[3]");
         $hashcondontables{"$condontables[0]\t$condontables[1]\t$condontables[2]\t$condontables[3]\t$condontables[4]\t$condontables[5]\t$condontables[6]\t$condontables[7]\t$condontables[8]\t$condontables[9]"}=[@groups];
+
+        my @groupelecments=("$condontables[1]","$condontables[2]","$condontables[3]","$condontables[4]","$condontables[5]","$condontables[6]","$condontables[7]","$condontables[8]","$condontables[9]");
+        push (@{$hashelecments{"$condontables[1]\t$condontables[2]\t$condontables[4]\t$condontables[9]"}}, [@groupelecments]);
+
     }
 }
 
@@ -338,7 +343,6 @@ foreach (@aminoacidlist) {
     }
 }
 
-open(MINORCHANGE, ">$outputMINORCHANGE");
 print MINORCHANGE "Protein\tAAPosition\tRefAA\tAAcoverage\tCntNonSyn\tCntSyn\tCntStop\tCntN\n";
 shift @regionlist;
 foreach (@regionlist) {
@@ -358,7 +362,7 @@ foreach (@regionlist) {
 
     foreach my $key1 (sort {$hashelecments{$a}[0][1] <=> $hashelecments{$b}[0][1]} keys %hashelecments) {
         if ($key1=~/^$eachcodongregions[0]\t/) {
-            print "$key1 => ";
+            #print "$key1 => ";
             print MINORCHANGE "$key1\t";
             @aaref=split(/\t/, $key1);
             my @codoncollection;
@@ -376,9 +380,9 @@ foreach (@regionlist) {
             my @countN;
             my @stopnum;
             for my $key2 (keys %hashaacount) {
-                print "$key2->";
+                #print "$key2->";
                 my $value_arr = $hashaacount{$key2};
-                print join(",", @$value_arr), "\ ";
+                #print join(",", @$value_arr), "\ ";
                 if ($key2 eq $aaref[2]) {
                     push (@sym, sum(@$value_arr));
                 }
