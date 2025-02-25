@@ -52,8 +52,10 @@ Required options:
 
 Optional options:
   -samplename         sample name, "alignment" by default.
+  -maxins             maximum fragment length of in your amplicon sequencing Library,
+  -minins             minimum fragment length of in your amplicon sequencing library, "50" by default.
+  -rotation           number of the consensus polish, "2" by default.
   -t/-thread          number of threads, 1 by default.
-  -minins             minimum fragment length of in your amplicon Library with paired-end sequencing, "50" by default.
   -o                  output path, "./" by default.
   
   -v/-version         Print version information.
