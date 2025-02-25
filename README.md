@@ -111,6 +111,10 @@ There a test data obtained from ARTIC (V3) Illumina sequencing of a cell culture
 perl AioMinor.pl -t 16 -platform illumina -method amplicon -maxins 500 -ref ./References/genome_NC_045512.2.fasta -codingRegion ./References/CodingRegion_NC_045512.2.txt -primerbed ./Primerbeds/nCoV-2019.primer_V3.bed -fq1 ./Testdata/cell_illumina_R1.fastq.gz -fq2 ./Testdata/cell_illumina_R2.fastq.gz -o cell_illumina_output
 ```
 
+## Citations
+Dong, Xiaofeng, et al. "Using minor variant genomes and machine learning to study the genome biology of SARS-CoV-2 over time." Nucleic Acids Research 53.4 (2025): gkaf077.
+
+Dong, Xiaofeng, et al. "Variation around the dominant viral genome sequence contributes to viral load and outcome in patients with Ebola virus disease." Genome biology 21 (2020): 1-20.
 
 
 
