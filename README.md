@@ -1,5 +1,5 @@
 </p>
-AioMinor was implemented in Perl programming language, including a main script for nucletide and amino acid varation frequency in virus genome. It accepts bascalled fastq files derived from Nanopore amplicon sequencing, cleaned/trimmed Illumina amplicon/normal fastq files (single-end or paired-end) with a SARS-CoV-2/other virus genome. By default, AioMinor analyses SARS-CoV-2 based on an NCBI reference genome (NC_045512.2), but the user can also provide customized SARS-CoV-2 or other virus genome as a reference.
+AioMinor was implemented in Perl programming language, including a main script for generation of consensus (dominant) virus genome, and calling of nucletide and amino acid varation frequency in both dominant and minor level. It accepts bascalled fastq files derived from Nanopore amplicon sequencing, cleaned/trimmed Illumina amplicon/normal fastq files (single-end or paired-end) with a SARS-CoV-2/other virus genome. By default, AioMinor analyses SARS-CoV-2 based on an NCBI reference genome (NC_045512.2), but the user can also provide customized SARS-CoV-2 or other virus genome as a reference.
 
 ## Installation:
 **1. Create an environment with one step**
@@ -54,7 +54,7 @@ Optional options:
   -samplename         sample name, "alignment" by default.
   -maxins             maximum fragment length of in your amplicon sequencing Library,
   -minins             minimum fragment length of in your amplicon sequencing library, "50" by default.
-  -rotation           number of the consensus polish, "2" by default.
+  -rotation           number of the consensus genome polish, "2" by default.
   -t/-thread          number of threads, 1 by default.
   -o                  output path, "./" by default.
   
@@ -98,7 +98,7 @@ The results can be found under the in output path.
 
 ### 3_Syn_NonSyn_filter_aa**
 
-*_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_minor_change_filtered.txt file in this folder prvides frequency of synonymous and non-synonymous substitution compared to the consensus genome after filtration. 
+*_AA_all_AA_filtered.txt file in this folder prvides the details of minor and major amino acids at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_AA_all_condon_filtered.txt file in this folder prvides the details of minor and major condons at each amino acid site after filtration in 2_Syn_NonSyn_filter. *_minor_change_filtered.txt file in this folder prvides minor frequency of synonymous and non-synonymous substitution compared to the consensus genome after filtration. 
 
 ### alignment/alignment.support_oem**
 consensus.txt file in this folder prvides consensus genome sequences.
