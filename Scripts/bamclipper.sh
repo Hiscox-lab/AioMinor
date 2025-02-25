@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bamclipper.sh
 
-usage() { echo "Usage: $0 -b BAM -p BEDPE [-n NTHREAD] [-s SAMTOOLS] [-g GNUPARALLEL] [-u UPSTREAM] [-d DOWNSTREAM]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -b BAM -p BEDPE -z OUTPUT [-n NTHREAD] [-s SAMTOOLS] [-g GNUPARALLEL] [-u UPSTREAM] [-d DOWNSTREAM]" 1>&2; exit 1; }
 
 NTHREAD=1
 SAMTOOLS="samtools"
@@ -9,7 +9,7 @@ PARALLEL="parallel"
 UPSTREAM=1
 DOWNSTREAM=5
 
-while getopts ":b:p:n::s::g::u::d::" o; do
+while getopts ":b:p:n::z::s::g::u::d::" o; do
     case "${o}" in
         b)
 	    BAM=${OPTARG}
@@ -24,6 +24,8 @@ while getopts ":b:p:n::s::g::u::d::" o; do
             NTHREAD=${OPTARG}
 	    [[ "$NTHREAD" -ge 1 ]] || usage
             ;;
+        z)
+            OUTPUT="$OPTARG";;
         s)
             SAMTOOLS=${OPTARG}
             ;;
@@ -52,4 +54,4 @@ fi
 SCRIPT_PATH="$(readlink -f $0)"
 SCRIPT_DIR="$(dirname $SCRIPT_PATH)"
 
-"$SAMTOOLS" sort -n -T ${BAMbn}.sort1 -@ "$NTHREAD" $BAM | "$SAMTOOLS" view -h | perl "$SCRIPT_DIR"/injectseparator.pl | "$PARALLEL" -j "$NTHREAD" --keep-order --remove-rec-sep --pipe --remove-rec-sep --recend '__\n' --block 1m "perl $SCRIPT_DIR/clipprimer.pl --in $BEDPE --upstream $UPSTREAM --downstream $DOWNSTREAM" | "$SAMTOOLS" sort -T ${BAMbn}.sort2 -l 0 -@ "$NTHREAD" > ${BAMbn%.bam}.primerclipped.bam && "$SAMTOOLS" index ${BAMbn%.bam}.primerclipped.bam
+"$SAMTOOLS" sort -n -T ${BAMbn}.sort1 -@ "$NTHREAD" $BAM | "$SAMTOOLS" view -h | perl "$SCRIPT_DIR"/injectseparator.pl | "$PARALLEL" -j "$NTHREAD" --keep-order --remove-rec-sep --pipe --remove-rec-sep --recend '__\n' --block 1m "perl $SCRIPT_DIR/clipprimer.pl --in $BEDPE --upstream $UPSTREAM --downstream $DOWNSTREAM" | "$SAMTOOLS" sort -T ${BAMbn}.sort2 -l 0 -@ "$NTHREAD" > $OUTPUT/${BAMbn%.bam}.primerclipped.bam && "$SAMTOOLS" index $OUTPUT/${BAMbn%.bam}.primerclipped.bam

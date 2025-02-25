@@ -1,0 +1,4 @@
+stat: Bad file descriptor
+Warning: Could not open read file "./Testdata/cell_illumina_R1.fastq.gz" for reading; skipping...
+Error: No input read files were valid
+(ERR): bowtie2-align exited with value 1
