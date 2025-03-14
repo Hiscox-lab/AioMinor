@@ -287,10 +287,10 @@ sub illuminaamplicon {
     #unlink ("$outputpath/alignment/$list\.sam");
     
     ###bam clipper run 1
-    system ("bash $selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed.txt -n $thread");
+    system ("bash $selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed.txt -z $outputpath -n $thread");
     unlink ("$outputpath/alignment/$list\.sorted.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
-    system ("mv ./$list\.sorted.primerclipped.bam* $outputpath/alignment");
+    system ("mv $outputpath/$list\.sorted.primerclipped.bam* $outputpath/alignment");
     system ("samtools view -h $outputpath/alignment/$list\.sorted.primerclipped.bam > $outputpath/alignment/$list\.sorted.primerclipped.sam");
     open(DATA,"$outputpath/alignment/$list\.sorted.primerclipped.sam");
     open(DATAR,">$outputpath/alignment/$list\.sorted.primerclipped.filtered.sam");
@@ -309,7 +309,8 @@ sub illuminaamplicon {
     close DATA; close DATAR;
     system ("samtools view -@ $thread -Sb $outputpath/alignment/$list\.sorted.primerclipped.filtered.sam | samtools sort -@ $thread -o $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam");
     system ("samtools index $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam");
-    system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage");
+    system ("samtools view -H $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam | grep -v 'bowtie2' | samtools reheader - $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam > temp.bam && mv temp.bam $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam");
+    system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx10G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage");
     system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus.txt");
     system ("rm -r $outputpath/alignment/$list\.support_oem/support");
     unlink ("$outputpath/alignment/$list\.sorted.primerclipped.bam");
@@ -348,10 +349,10 @@ sub illuminaamplicon {
     }
     close PREBED; close PREBEDR;
 
-    system ("bash $selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed_r.txt -n $thread");
+    system ("bash $selfpath/Scripts/bamclipper.sh -b $outputpath/alignment/$list\.sorted.bam -p $outputpath/bamclipper_primer_bed_r.txt -z $outputpath -n $thread");
     unlink ("$outputpath/alignment/$list\.sorted.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
-    system ("mv ./$list\.sorted.primerclipped.bam* $outputpath/alignment");
+    system ("mv $outputpath/$list\.sorted.primerclipped.bam* $outputpath/alignment");
     system ("samtools view -h $outputpath/alignment/$list\.sorted.primerclipped.bam > $outputpath/alignment/$list\.sorted.primerclipped.sam");
     open(DATA,"$outputpath/alignment/$list\.sorted.primerclipped.sam");
     open(DATAR,">$outputpath/alignment/$list\.sorted.primerclipped.filtered.sam");
