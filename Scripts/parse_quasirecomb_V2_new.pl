@@ -19,7 +19,7 @@ open(INCOVERAGE, "$ARGV[1]"); # opens quasirecomd output
 close INCOVERAGE;
 
 open(OUTB, ">$ARGV[2]");
-print OUTB ">consensus\n";
+print OUTB ">$ARGV[3]\n";
 print OUTB "N" x $numposcov[0];
 
 while($line = <INFILE>){
