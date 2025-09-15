@@ -57,7 +57,7 @@ Optional options:
   -samplename         sample name, \"alignment\" by default.
   -maxins             maximum fragment length of in your amplicon sequencing Library,
   -minins             minimum fragment length of in your amplicon sequencing library, \"50\" by default.
-  -rotation           number of the consensus genome polish, "2" by default.
+  -rotation           number of the consensus genome polish, \"2\" by default.
   -t/-thread          number of threads, 1 by default.
   -o                  output file or directory, \".\/AioMinor\" by default.
   
