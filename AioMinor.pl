@@ -68,7 +68,7 @@ Optional options:
 #The maximum fragment length for valid paired-end alignments.
 
 if ($options{'version'}) {
-    print "v1.0\n";
+    print "v1.1\n";
     exit;
 }
 
@@ -141,11 +141,11 @@ if (!exists ($options{'t'})) {
 }
 
 my $list;
-#if (!exists ($options{'samplename'})) {
+if (!exists ($options{'samplename'})) {
     $list= "alignment";
-#}elsif (exists ($options{'samplename'})) {
-#    $list= $options{'samplename'};
-#}
+}elsif (exists ($options{'samplename'})) {
+    $list= $options{'samplename'};
+}
 
 my $minins;
 if (!exists ($options{'minins'})) {
@@ -255,6 +255,8 @@ if ($options{'platform'} eq "illumina" && $options{'method'} eq "cDNA") {
     &illuminacdna;
 }
 
+system ("cp $outputpath/alignment/$list\.support_oem/consensus.txt $outputpath/consensus.txt");
+
 sub illuminacdna {
     ###mapping run 1
     print "The output file or directory is \"$outputpath\"\nCalling consensus:\nRotating 1\n";
@@ -277,7 +279,7 @@ sub illuminacdna {
     }
     unlink ("$outputpath/alignment/$list\.sam");
     system("samtools index $outputpath/alignment/$list\.sorted.bam");
-    system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=tmp ASSUME_SORTED=true 2> /dev/null");
+    system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=$outputpath/dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=$outputpath/tmp ASSUME_SORTED=true 2> /dev/null");
     system("samtools index $outputpath/alignment/$list\_markup.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
@@ -294,7 +296,7 @@ sub illuminacdna {
             system("samtools view -b $outputpath/alignment/$list\_markup.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
             system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam 2> /dev/null");
             system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -309,7 +311,7 @@ sub illuminacdna {
          }
          close EACHCONSENSUSR;
     }else{
-        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_markup.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_markup.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
         system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_1.txt $eachchromosomeIDs[0]");
         system ("rm -r $outputpath/alignment/$list\.support_oem/support");
     }
@@ -337,7 +339,7 @@ sub illuminacdna {
         }
         unlink ("$outputpath/alignment/$list\.sam");
         system("samtools index $outputpath/alignment/$list\.sorted.bam");
-        system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=tmp ASSUME_SORTED=true 2> /dev/null");
+        system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=$outputpath/dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=$outputpath/tmp ASSUME_SORTED=true 2> /dev/null");
         system("samtools index $outputpath/alignment/$list\_markup.bam");
         unlink ("$outputpath/alignment/$list\.sorted.bam");
         unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
@@ -348,7 +350,7 @@ sub illuminacdna {
                 system("samtools view -b $outputpath/alignment/$list\_markup.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
                 system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam 2> /dev/null");
                 system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -363,7 +365,7 @@ sub illuminacdna {
             }
             close EACHCONSENSUSR;
         }else{
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_markup.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_markup.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
             system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_$connum.txt $eachchromosomeIDs[0]");
             system ("rm -r $outputpath/alignment/$list\.support_oem/support");
         }
@@ -392,7 +394,7 @@ sub illuminacdna {
     }
     unlink ("$outputpath/alignment/$list\.sam");
     system("samtools index $outputpath/alignment/$list\.sorted.bam");
-    system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=tmp ASSUME_SORTED=true 2> /dev/null");
+    system("java -jar $selfpath/Scripts/picard.jar MarkDuplicates INPUT=$outputpath/alignment/$list\.sorted.bam OUTPUT=$outputpath/alignment/$list\_markup.bam METRICS_FILE=$outputpath/dup.txt VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=true TMP_DIR=$outputpath/tmp ASSUME_SORTED=true 2> /dev/null");
     system("samtools index $outputpath/alignment/$list\_markup.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam");
     unlink ("$outputpath/alignment/$list\.sorted.bam.bai");
@@ -481,7 +483,7 @@ sub illuminacdna {
         }
         close SVGAA;
         
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }else{
     	  my @genome;
         open (GENOMESEQ,"$options{'ref'}");
@@ -522,7 +524,7 @@ sub illuminacdna {
         }
         close CODINGREG; close SVGAA;
     
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }
 }
 
@@ -596,7 +598,7 @@ sub illuminaamplicon {
             system("samtools view -b $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
             system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam 2> /dev/null");
             system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -611,7 +613,7 @@ sub illuminaamplicon {
          }
          close EACHCONSENSUSR;
     }else{
-        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
         system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_1.txt $eachchromosomeIDs[0]");
         system ("rm -r $outputpath/alignment/$list\.support_oem/support");
     }
@@ -681,7 +683,7 @@ sub illuminaamplicon {
                 system("samtools view -b $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
                 system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
                 system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -696,7 +698,7 @@ sub illuminaamplicon {
              }
              close EACHCONSENSUSR;
         }else{
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\.sorted.primerclipped.filtered.sorted.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
             system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_$connum.txt $eachchromosomeIDs[0]");
             system ("rm -r $outputpath/alignment/$list\.support_oem/support");
         }
@@ -849,7 +851,7 @@ sub illuminaamplicon {
         }
         close SVGAA;
         
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }else{
     	my @genome;
         open (GENOMESEQ,"$options{'ref'}");
@@ -890,7 +892,7 @@ sub illuminaamplicon {
         }
         close CODINGREG; close SVGAA;
     
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }
 }
 
@@ -938,7 +940,7 @@ sub nanoporeamplicon {
             system("samtools view -b $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
             system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam 2> /dev/null");
             system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
             unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -953,7 +955,7 @@ sub nanoporeamplicon {
          }
          close EACHCONSENSUSR;
     }else{
-        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+        system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
         system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_1.txt $eachchromosomeIDs[0]");
         system ("rm -r $outputpath/alignment/$list\.support_oem/support");
     }
@@ -984,7 +986,7 @@ sub nanoporeamplicon {
                 system("samtools view -b $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam $eachchromosomeID > $outputpath/alignment/$list\_$eachchromosomeID\.bam 2> /dev/null");
                 system("samtools sort $outputpath/alignment/$list\_$eachchromosomeID\.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
                 system("samtools index $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
-                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
+                system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\_$eachchromosomeID\.sort.bam -o $outputpath/alignment/$list\_$eachchromosomeID\.support_oem -coverage 1> /dev/null");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.bam.bai");
                 unlink ("$outputpath/alignment/$list\_$eachchromosomeID\.sort.bam");
@@ -999,7 +1001,7 @@ sub nanoporeamplicon {
              }
              close EACHCONSENSUSR;
         }else{
-            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -i $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
+            system("java -XX:+UseParallelGC -XX:+UseNUMA -XX:NewRatio=9 -Xms10G -Xmx200G -jar $selfpath/Scripts/QuasiRecomb.jar -unpaired -i $outputpath/alignment/$list\.primertrimmed.rg.sorted.reheader.bam -o $outputpath/alignment/$list\.support_oem -coverage 1> /dev/null");
             system("perl $selfpath/Scripts/parse_quasirecomb_V2_new.pl $outputpath/alignment/$list\.support_oem/support/allel_distribution_phred_weighted.txt $outputpath/alignment/$list\.support_oem/support/coverage.txt $outputpath/alignment/$list\.support_oem/consensus_$connum.txt $eachchromosomeIDs[0]");
             system ("rm -r $outputpath/alignment/$list\.support_oem/support");
         }
@@ -1111,7 +1113,7 @@ sub nanoporeamplicon {
         }
         close SVGAA;
         
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }else{
     	my @genome;
         open (GENOMESEQ,"$options{'ref'}");
@@ -1152,7 +1154,7 @@ sub nanoporeamplicon {
         }
         close CODINGREG; close SVGAA;
     
-        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_minor_change_filtered_ref.txt");
+        &parseminorchange("$options{'codingRegion'}", "$outputpath/3_Syn_NonSyn_filter_aa/$list\_AA_all_condon_filtered.txt","$outputpath/3_Syn_NonSyn_filter_aa/$list\_alignment_change_filtered_ref.txt");
     }
 }
 
